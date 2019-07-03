@@ -16,6 +16,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import BaggingClassifier
 from sklearn.metrics import classification_report,confusion_matrix,accuracy_score,roc_curve,auc
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
+from sklearn.externals import joblib #add this model for the use of saving thing
 
 # k in cross validation k fold
 cv_k = 10
@@ -55,6 +57,8 @@ def SVM(X_data, Y_data, x_train, x_test, y_train, y_test):
 	score =  cross_val_score(svm_classifier, X_data, Y_data, cv=cv_k)
 	print sum(score)/len(score)
 	print classification_report(y_test,svm_pred)
+	joblib.dump(svm_classifier, 'model.pickle') #save this model,next time we shouldn't train again,if there will be a next time using
+
 	
 	
 
@@ -174,6 +178,7 @@ print dataset.columns
 
 #only the x_data
 X_data = dataset.iloc[:,0:-1].values
+X_data=preprocessing.normalize(X_data, norm='l2')  #Regularization，i think it might do good job in strength the rate of true
 print X_data[1]
 
 #Ydata has the labels 0 not a pulsar 1 a pulsar
